@@ -1,9 +1,9 @@
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const { sendMail } = require('../utils/email');
-const { generateOTP } = require('../utils/otp');
+import bcrypt from 'bcryptjs';
+import User from '../models/user.js';
+import { sendMail } from '../utils/email.js';
+import { generateOTP } from '../utils/otp.js';
 
-exports.forgotPassword = async (req, res) => {
+export const forgotPassword = async (req, res) => {
   const { email } = req.body;
 
   try {
@@ -26,7 +26,7 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-exports.verifyOtp = async (req, res) => {
+export const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
   
   try {
@@ -51,7 +51,7 @@ exports.verifyOtp = async (req, res) => {
   }
 };
 
-exports.resetPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
   try {
     const { newPassword, confirmPassword } = req.body;
 

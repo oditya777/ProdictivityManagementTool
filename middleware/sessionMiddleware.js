@@ -1,8 +1,10 @@
-const session = require('express-session');
+import session from 'express-session';
 
-module.exports = session({
+const sessionMiddleware = session({
   secret: 'your_secret_key',
   resave: false,
   saveUninitialized: false,
   cookie: { secure: false } // Use secure: true if using HTTPS
 });
+
+export default sessionMiddleware;

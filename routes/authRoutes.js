@@ -1,33 +1,26 @@
-
-const userController = require('../controllers/userController');
-
-const express = require('express');
-const authController = require('../controllers/authController');
+import express from 'express';
+import { forgotPassword, verifyOtp, resetPassword } from '../controllers/authController.js';
+import { getAllUsers, getUserById, createUser, updateUser, deleteUser } from '../controllers/userController.js';
 
 const router = express.Router();
 
-router.post('/forgot-password', authController.forgotPassword);
-router.post('/verify-otp', authController.verifyOtp);
-router.post('/reset-password', authController.resetPassword);
-
-
-
+router.post('/forgot-password', forgotPassword);
+router.post('/verify-otp', verifyOtp);
+router.post('/reset-password', resetPassword);
 
 // GET all users
-router.get('/', userController.getAllUsers);
+router.get('/', getAllUsers);
 
 // GET user by ID
-router.get('/:id', userController.getUserById);
+router.get('/:id', getUserById);
 
 // POST create new user
-router.post('/', userController.createUser);
+router.post('/', createUser);
 
 // PUT update user
-router.put('/:id', userController.updateUser);
+router.put('/:id', updateUser);
 
 // DELETE delete user
-router.delete('/:id', userController.deleteUser);
+router.delete('/:id', deleteUser);
 
-module.exports = router;
-
-module.exports = router;
+export default router;

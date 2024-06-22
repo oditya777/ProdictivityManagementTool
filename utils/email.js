@@ -1,5 +1,5 @@
-const nodemailer = require('nodemailer');
-const dotenv = require('dotenv');
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -24,18 +24,4 @@ const sendMail = (to, subject, text) => {
   return transporter.sendMail(mailOptions);
 };
 
-module.exports = { sendMail };
-
-
-
-
-// host: 'smtp.ethereal.email',
-//  user: 'bethel.oreilly41@ethereal.email',
-//       pass: 'DzRFabxEuBeD3KwDhM'
-
-
-//       from: '"password reset👻" <odityakatre12@gmail.com.email>',
-//       to: to,
-//       subject: subject,
-//       text: text,
-//     };
+export { sendMail };

@@ -1,33 +1,24 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const sessionMiddleware = require('./middleware/sessionMiddleware');
-const authRoutes = require('./routes/authRoutes');
-require('dotenv').config(); // Load environment variables
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import authRoutes from './routes/authRoutes.js';
+import cors from 'cors';
+import sessionMiddleware from './middleware/sessionMiddleware.js';
 
 const app = express();
 
-// Middleware to parse JSON bodies
-app.use(bodyParser.json());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  })
+);
 
-// Session middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.use(cookieParser());
 app.use(sessionMiddleware);
 
-// Use the auth routes
 app.use('/api', authRoutes);
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('Connected to MongoDB');
-}).catch(err => {
-  console.error('Failed to connect to MongoDB', err);
-});
-
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+export default app;

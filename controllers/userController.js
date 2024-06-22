@@ -1,9 +1,6 @@
-// controllers/userController.js
+import User from '../models/User.js';
 
-const User = require('../models/User');
-
-// GET - Fetch all users
-exports.getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
@@ -13,8 +10,7 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// GET - Fetch user by ID
-exports.getUserById = async (req, res) => {
+export const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
@@ -30,8 +26,7 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-// POST - Create a new user
-exports.createUser = async (req, res) => {
+export const createUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     
@@ -52,8 +47,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// PUT - Update user details
-exports.updateUser = async (req, res) => {
+export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const { email, password } = req.body;
@@ -75,8 +69,7 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-// DELETE - Delete user
-exports.deleteUser = async (req, res) => {
+export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
