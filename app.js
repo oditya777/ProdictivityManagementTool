@@ -6,6 +6,8 @@ import cors from "cors";
 import logger from "./Middlewares/logger.js";
 import errorMiddleware from "./Middlewares/errorMiddleware.js";
 import authRoutes from "./router/authRoutes.js";
+import attendantRoutes from "./router/attendantRoutes.js";
+import projectRoutes from "./router/projectRoutes.js";
 import bodyParser from "body-parser";
 const app = express();
 app.use(
@@ -24,6 +26,8 @@ app.use(errorMiddleware);
 
 app.use("/api/partners", partnerRouter);
 app.use("/api/customers", customerRoutes);
+app.use("/api/attendants", attendantRoutes);
 app.use("/api/login", authRoutes);
+app.use("/api/projects", projectRoutes);
 
 export { app };

@@ -1,5 +1,7 @@
 import Customer from '../Models/customer.js';
 import asyncHandler from '../utils/asyncHandler.js';
+import Attendant from '../Models/Attendant.js';
+import Project from '../Models/projectModel.js';
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -14,13 +16,34 @@ export const createCustomer = asyncHandler(async (req, res) => {
     const customers = await Customer.find({});
     const customerId = `ROFC${(customers.length + 1).toString()}`;
 
+    const project = await Project.findOne({"name" : projectName});
+    if (!project) {
+        return res.status(400).json({ message: 'Project not found.' });
+    }
+    const teams = project.teams;
+
+    const availableAttendant = await Attendant.findOneAndUpdate(
+        { status: 'available', team: { $in: teams } },
+        { 
+            status: 'assigned' 
+        },
+        { new: true }
+    );
+
+    if (!availableAttendant) {
+        return res.status(400).json({ message: 'No available attendants of same team.' });
+    }
+
     Customer.create({
         name, 
         email, 
         mobile, 
         projectName, 
         projectLocation, 
-        customerId
+        customerId,
+        attendant: availableAttendant._id,
+        attendantName: availableAttendant.name,
+        team: availableAttendant.team
     })
     res.status(201).json({
         name, 
@@ -28,19 +51,21 @@ export const createCustomer = asyncHandler(async (req, res) => {
         mobile, 
         projectName, 
         projectLocation, 
-        customerId
+        customerId,
+        attendantName: availableAttendant.name,
+        team: availableAttendant.team
     })
 });
 
 
 export const getCustomers = asyncHandler(async (req, res) => {
-    const customers = await Customer.find();
+    const customers = await Customer.find().populate('attendant', 'name');
     res.status(200).json(customers);
 });
 
 
 export const getCustomerById = asyncHandler(async (req, res) => {
-    const registeredCustomer = await Customer.find({"customerId" : req.params.id});
+    const registeredCustomer = await Customer.find({"customerId" : req.params.id}).populate('attendant', 'name');
     if (!registeredCustomer) return res.status(404).json({ message: 'Customer not found' });
     res.status(200).json(registeredCustomer);
 });
@@ -50,6 +75,9 @@ export const updateCustomer = asyncHandler(async (req, res) => {
     const { name, email, mobile } = req.body;
     const customer = await Customer.findByIdAndUpdate(req.params.id, { name, email, mobile }, { new: true, runValidators: true });
     if (!customer) return res.status(404).json({ message: 'Customer not found' });
+    
+    await Attendant.findByIdAndUpdate(customer.attendant, { status: 'available' });
+    
     res.status(200).json(customer);
 });
 
