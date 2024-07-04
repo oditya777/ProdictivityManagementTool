@@ -2,9 +2,8 @@ import mongoose from "mongoose";
 
 const serviceSchema = new mongoose.Schema({
 
+    serviceNum: { type: Number, required: true },
     serviceType: { type: String, required: true }
 });
 
- const Service = mongoose.model('Service', serviceSchema);
-
- export default Service;
+export const Service = mongoose.model('Service', serviceSchema);
