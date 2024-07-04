@@ -2,7 +2,6 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import partnerRouter from "./router/partnerRouter.js";
 import customerRoutes from "./router/customerRoutes.js";
-import serviceRoutes from "./router/serviceRoutes.js";
 import cors from "cors";
 import logger from "./Middlewares/logger.js";
 import errorMiddleware from "./Middlewares/errorMiddleware.js";
@@ -30,8 +29,5 @@ app.use("/api/customers", customerRoutes);
 app.use("/api/attendants", attendantRoutes);
 app.use("/api/login", authRoutes);
 app.use("/api/projects", projectRoutes);
-app.use("/api/services", serviceRoutes);
-
-
 
 export { app };
