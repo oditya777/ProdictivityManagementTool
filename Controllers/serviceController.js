@@ -1,4 +1,4 @@
-import  Service  from '../Models/Service.js';
+import { Service } from '../Models/Service.js';
 
 // Get all services
 export const getServices = async (req, res) => {
@@ -10,10 +10,10 @@ export const getServices = async (req, res) => {
     }
 };
 
-// Get a single service by id
-export const getServiceById = async (req, res) => {
+// Get a single service by serviceNum
+export const getServiceByNum = async (req, res) => {
     try {
-        const services = await Service.findOne({ id: req.params.id });
+        const services = await Service.findOne({ serviceNum: req.params.serviceNum });
         if (services) {
             res.status(200).json({ serviceType: services.serviceType});
         } else {
@@ -26,9 +26,10 @@ export const getServiceById = async (req, res) => {
 
 // Create a new Service
 export const createService = async (req, res) => {
-    const { serviceType } = req.body;
+    const { serviceNum, serviceType } = req.body;
 
     const newService = new Service({
+        serviceNum,
         serviceType        
     });
 
@@ -42,12 +43,12 @@ export const createService = async (req, res) => {
 
 // Update an existing service
 export const updateService = async (req, res) => {
-    const { id } = req.params;
+    const { serviceNum } = req.params;
     const { serviceType } = req.body;
 
     try {
         const updatedService = await Service.findOneAndUpdate(
-            { id },
+            { serviceNum },
             { serviceType },
             { new: true }
         );
@@ -64,10 +65,10 @@ export const updateService = async (req, res) => {
 
 // Delete a service
 export const deleteService = async (req, res) => {
-    const { id } = req.params;
+    const { serviceNum } = req.params;
 
     try {
-        const deletedService = await Service.findOneAndDelete({ id });
+        const deletedService = await Service.findOneAndDelete({ serviceNum });
 
         if (!deletedService) {
             return res.status(404).json({ message: 'Service not found' });
